@@ -2,9 +2,9 @@ package com.example.easyafya
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
 
         setContent {
@@ -47,18 +48,46 @@ class MainActivity : ComponentActivity() {
 
                     when (currentScreen) {
 
+                        // =========================
+                        // HOME SCREEN
+                        // =========================
+
                         "home" -> {
                             HomeScreen(
                                 modifier = Modifier.padding(innerPadding),
+
                                 onRequestVisitClick = {
                                     currentScreen = "request"
                                 }
                             )
                         }
 
+                        // =========================
+                        // REQUEST VISIT SCREEN
+                        // =========================
+
                         "request" -> {
                             RequestVisitScreen(
                                 modifier = Modifier.padding(innerPadding),
+
+                                onBackClick = {
+                                    currentScreen = "home"
+                                },
+
+                                onSubmitted = {
+                                    currentScreen = "status"
+                                }
+                            )
+                        }
+
+                        // =========================
+                        // REQUEST STATUS SCREEN
+                        // =========================
+
+                        "status" -> {
+                            RequestStatusScreen(
+                                modifier = Modifier.padding(innerPadding),
+
                                 onBackClick = {
                                     currentScreen = "home"
                                 }
@@ -71,6 +100,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
+// =====================================================
+// HOME SCREEN
+// =====================================================
+
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -81,7 +115,9 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(24.dp),
+
         horizontalAlignment = Alignment.CenterHorizontally,
+
         verticalArrangement = Arrangement.Center
     ) {
 
@@ -91,14 +127,18 @@ fun HomeScreen(
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
 
         Text(
             text = "Community Health Services",
             fontSize = 18.sp
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
 
         Text(
             text = "How can we help you today?",
@@ -106,7 +146,12 @@ fun HomeScreen(
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+
+        // Request Health Visit button
 
         Button(
             onClick = onRequestVisitClick,
@@ -115,34 +160,52 @@ fun HomeScreen(
             Text("Request Health Visit")
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Services button
 
         Button(
             onClick = {
                 // We will build this next
             },
+
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Health Services")
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Tips button
 
         Button(
             onClick = {
                 // We will build this next
             },
+
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Health Tips")
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // My Requests button
 
         Button(
             onClick = {
                 // We will build this next
             },
+
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("My Requests")
@@ -150,22 +213,47 @@ fun HomeScreen(
     }
 }
 
+
+// =====================================================
+// REQUEST HEALTH VISIT SCREEN
+// =====================================================
+
 @Composable
 fun RequestVisitScreen(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onSubmitted: () -> Unit
 ) {
 
-    var name by rememberSaveable { mutableStateOf("") }
-    var phone by rememberSaveable { mutableStateOf("") }
-    var location by rememberSaveable { mutableStateOf("") }
-    var healthNeed by rememberSaveable { mutableStateOf("") }
+    // Form fields
 
-    var submitted by rememberSaveable { mutableStateOf(false) }
+    var name by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var phone by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var location by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var healthNeed by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var submitted by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+
+    // Android back button
 
     BackHandler {
         onBackClick()
     }
+
 
     Column(
         modifier = modifier
@@ -179,75 +267,135 @@ fun RequestVisitScreen(
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
 
         Text(
             text = "Enter your information below"
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+
+        // Full Name
 
         OutlinedTextField(
             value = name,
-            onValueChange = { name = it },
+
+            onValueChange = {
+                name = it
+            },
+
             label = {
                 Text("Full Name")
             },
+
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Phone Number
 
         OutlinedTextField(
             value = phone,
-            onValueChange = { phone = it },
+
+            onValueChange = {
+                phone = it
+            },
+
             label = {
                 Text("Phone Number")
             },
+
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Location
 
         OutlinedTextField(
             value = location,
-            onValueChange = { location = it },
+
+            onValueChange = {
+                location = it
+            },
+
             label = {
                 Text("Location")
             },
+
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Need
 
         OutlinedTextField(
             value = healthNeed,
-            onValueChange = { healthNeed = it },
+
+            onValueChange = {
+                healthNeed = it
+            },
+
             label = {
                 Text("Health Need")
             },
+
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+
+        // Submit button
 
         Button(
             onClick = {
+
                 if (
                     name.isNotBlank() &&
                     phone.isNotBlank() &&
                     location.isNotBlank() &&
                     healthNeed.isNotBlank()
                 ) {
+
                     submitted = true
+
+                    // Move to status screen
+
+                    onSubmitted()
                 }
             },
+
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("REQUEST VISIT")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+
+        // This section is kept for now.
+        // Later we will replace it with database functionality.
 
         if (submitted) {
 
@@ -257,7 +405,9 @@ fun RequestVisitScreen(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
 
             Text(
                 text = """
@@ -266,11 +416,111 @@ fun RequestVisitScreen(
                     Location: $location
                     Health Need: $healthNeed
                 """.trimIndent(),
+
                 fontSize = 17.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+
+        // Back button
+
+        Button(
+            onClick = onBackClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("BACK TO HOME")
+        }
+    }
+}
+
+
+// =====================================================
+// REQUEST STATUS SCREEN
+// =====================================================
+
+@Composable
+fun RequestStatusScreen(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+) {
+
+    // Android back button
+
+    BackHandler {
+        onBackClick()
+    }
+
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
+
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Text(
+            text = "Request Submitted!",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+        Text(
+            text = "Your community health visit request has been received.",
+            fontSize = 18.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+
+        // Status title
+
+        Text(
+            text = "STATUS",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
+
+        // Current request status
+
+        Text(
+            text = "PENDING",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+        Text(
+            text = "A health worker will review your request.",
+            fontSize = 16.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+
+
+        // Back to home
 
         Button(
             onClick = onBackClick,
