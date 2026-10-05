@@ -28,6 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.easyafya.ui.theme.EasyafyaTheme
 
+
+// HEALTH REQUEST DATA
+
+data class HealthRequest(
+    val name: String,
+    val phone: String,
+    val location: String,
+    val healthNeed: String
+)
+
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +51,10 @@ class MainActivity : ComponentActivity() {
 
                 var currentScreen by rememberSaveable {
                     mutableStateOf("home")
+                }
+
+                var healthRequest by rememberSaveable {
+                    mutableStateOf<HealthRequest?>(null)
                 }
 
                 Scaffold(
@@ -64,6 +79,10 @@ class MainActivity : ComponentActivity() {
 
                                 onHealthTipsClick = {
                                     currentScreen = "tips"
+                                },
+
+                                onMyRequestsClick = {
+                                    currentScreen = "requests"
                                 }
                             )
                         }
@@ -78,7 +97,10 @@ class MainActivity : ComponentActivity() {
                                     currentScreen = "home"
                                 },
 
-                                onSubmitted = {
+                                onSubmitted = { request ->
+
+                                    healthRequest = request
+
                                     currentScreen = "status"
                                 }
                             )
@@ -119,6 +141,20 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
+                        // MY REQUESTS SCREEN
+
+                        "requests" -> {
+                            MyRequestsScreen(
+                                modifier = Modifier.padding(innerPadding),
+
+                                healthRequest = healthRequest,
+
+                                onBackClick = {
+                                    currentScreen = "home"
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -134,7 +170,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onRequestVisitClick: () -> Unit,
     onHealthServicesClick: () -> Unit,
-    onHealthTipsClick: () -> Unit
+    onHealthTipsClick: () -> Unit,
+    onMyRequestsClick: () -> Unit
 ) {
 
     Column(
@@ -223,9 +260,7 @@ fun HomeScreen(
         // My Requests button
 
         Button(
-            onClick = {
-                // We will build this next
-            },
+            onClick = onMyRequestsClick,
 
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -241,7 +276,7 @@ fun HomeScreen(
 fun RequestVisitScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onSubmitted: () -> Unit
+    onSubmitted: (HealthRequest) -> Unit
 ) {
 
     // Form fields
@@ -397,7 +432,14 @@ fun RequestVisitScreen(
 
                     submitted = true
 
-                    onSubmitted()
+                    val request = HealthRequest(
+                        name = name,
+                        phone = phone,
+                        location = location,
+                        healthNeed = healthNeed
+                    )
+
+                    onSubmitted(request)
                 }
             },
 
@@ -761,6 +803,132 @@ fun HealthTipsScreen(
             text = "• Seek professional medical help when you are unwell or concerned about your health.",
             fontSize = 17.sp
         )
+
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+
+
+        // Back button
+
+        Button(
+            onClick = onBackClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("BACK TO HOME")
+        }
+    }
+}
+
+
+// MY REQUESTS SCREEN
+
+@Composable
+fun MyRequestsScreen(
+    modifier: Modifier = Modifier,
+    healthRequest: HealthRequest?,
+    onBackClick: () -> Unit
+) {
+
+    BackHandler {
+        onBackClick()
+    }
+
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+
+        Text(
+            text = "My Requests",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+
+        // Check if a request exists
+
+        if (healthRequest == null) {
+
+            Text(
+                text = "No health visit requests found.",
+                fontSize = 18.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Text(
+                text = "Submit a health visit request to see it here.",
+                fontSize = 16.sp
+            )
+
+        } else {
+
+            // Request information
+
+            Text(
+                text = "Health Visit Request",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+
+            Text(
+                text = "Name: ${healthRequest.name}",
+                fontSize = 17.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            Text(
+                text = "Phone: ${healthRequest.phone}",
+                fontSize = 17.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            Text(
+                text = "Location: ${healthRequest.location}",
+                fontSize = 17.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            Text(
+                text = "Health Need: ${healthRequest.healthNeed}",
+                fontSize = 17.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+
+            // Request status
+
+            Text(
+                text = "Status: PENDING",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
 
         Spacer(
             modifier = Modifier.height(32.dp)
