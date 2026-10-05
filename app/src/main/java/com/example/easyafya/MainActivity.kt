@@ -48,9 +48,7 @@ class MainActivity : ComponentActivity() {
 
                     when (currentScreen) {
 
-                        // =========================
                         // HOME SCREEN
-                        // =========================
 
                         "home" -> {
                             HomeScreen(
@@ -58,13 +56,19 @@ class MainActivity : ComponentActivity() {
 
                                 onRequestVisitClick = {
                                     currentScreen = "request"
+                                },
+
+                                onHealthServicesClick = {
+                                    currentScreen = "services"
+                                },
+
+                                onHealthTipsClick = {
+                                    currentScreen = "tips"
                                 }
                             )
                         }
 
-                        // =========================
                         // REQUEST VISIT SCREEN
-                        // =========================
 
                         "request" -> {
                             RequestVisitScreen(
@@ -80,12 +84,34 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        // =========================
                         // REQUEST STATUS SCREEN
-                        // =========================
 
                         "status" -> {
                             RequestStatusScreen(
+                                modifier = Modifier.padding(innerPadding),
+
+                                onBackClick = {
+                                    currentScreen = "home"
+                                }
+                            )
+                        }
+
+                        // HEALTH SERVICES SCREEN
+
+                        "services" -> {
+                            HealthServicesScreen(
+                                modifier = Modifier.padding(innerPadding),
+
+                                onBackClick = {
+                                    currentScreen = "home"
+                                }
+                            )
+                        }
+
+                        // HEALTH TIPS SCREEN
+
+                        "tips" -> {
+                            HealthTipsScreen(
                                 modifier = Modifier.padding(innerPadding),
 
                                 onBackClick = {
@@ -101,14 +127,14 @@ class MainActivity : ComponentActivity() {
 }
 
 
-// =====================================================
 // HOME SCREEN
-// =====================================================
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onRequestVisitClick: () -> Unit
+    onRequestVisitClick: () -> Unit,
+    onHealthServicesClick: () -> Unit,
+    onHealthTipsClick: () -> Unit
 ) {
 
     Column(
@@ -168,10 +194,7 @@ fun HomeScreen(
         // Health Services button
 
         Button(
-            onClick = {
-                // We will build this next
-            },
-
+            onClick = onHealthServicesClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Health Services")
@@ -185,9 +208,7 @@ fun HomeScreen(
         // Health Tips button
 
         Button(
-            onClick = {
-                // We will build this next
-            },
+            onClick = onHealthTipsClick,
 
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -214,9 +235,7 @@ fun HomeScreen(
 }
 
 
-// =====================================================
 // REQUEST HEALTH VISIT SCREEN
-// =====================================================
 
 @Composable
 fun RequestVisitScreen(
@@ -378,8 +397,6 @@ fun RequestVisitScreen(
 
                     submitted = true
 
-                    // Move to status screen
-
                     onSubmitted()
                 }
             },
@@ -394,8 +411,7 @@ fun RequestVisitScreen(
         )
 
 
-        // This section is kept for now.
-        // Later we will replace it with database functionality.
+        // Submission information
 
         if (submitted) {
 
@@ -438,9 +454,7 @@ fun RequestVisitScreen(
 }
 
 
-// =====================================================
 // REQUEST STATUS SCREEN
-// =====================================================
 
 @Composable
 fun RequestStatusScreen(
@@ -448,12 +462,9 @@ fun RequestStatusScreen(
     onBackClick: () -> Unit
 ) {
 
-    // Android back button
-
     BackHandler {
         onBackClick()
     }
-
 
     Column(
         modifier = modifier
@@ -521,6 +532,242 @@ fun RequestStatusScreen(
 
 
         // Back to home
+
+        Button(
+            onClick = onBackClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("BACK TO HOME")
+        }
+    }
+}
+
+
+// HEALTH SERVICES SCREEN
+
+@Composable
+fun HealthServicesScreen(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+) {
+
+    BackHandler {
+        onBackClick()
+    }
+
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+
+        Text(
+            text = "Health Services",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+        Text(
+            text = "Community Health Services",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+
+        // Service 1
+
+        Text(
+            text = "• Maternal and Child Health",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Service 2
+
+        Text(
+            text = "• Health Screening",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Service 3
+
+        Text(
+            text = "• Immunization Support",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Service 4
+
+        Text(
+            text = "• Health Education",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Service 5
+
+        Text(
+            text = "• Home Health Visits",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Service 6
+
+        Text(
+            text = "• Community Health Screening",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+
+
+        // Back button
+
+        Button(
+            onClick = onBackClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("BACK TO HOME")
+        }
+    }
+}
+
+
+// HEALTH TIPS SCREEN
+
+@Composable
+fun HealthTipsScreen(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit
+) {
+
+    BackHandler {
+        onBackClick()
+    }
+
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+
+        Text(
+            text = "Health Tips",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+
+        Text(
+            text = "Simple Community Health Tips",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+
+        // Health Tip 1
+
+        Text(
+            text = "• Wash your hands regularly with soap and clean water.",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Tip 2
+
+        Text(
+            text = "• Drink safe and clean water throughout the day.",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Tip 3
+
+        Text(
+            text = "• Eat a balanced diet with a variety of nutritious foods.",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Tip 4
+
+        Text(
+            text = "• Keep your surroundings clean to help prevent infections.",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+
+        // Health Tip 5
+
+        Text(
+            text = "• Seek professional medical help when you are unwell or concerned about your health.",
+            fontSize = 17.sp
+        )
+
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+
+
+        // Back button
 
         Button(
             onClick = onBackClick,
