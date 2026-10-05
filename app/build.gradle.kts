@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.easyafya"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.easyafya"
@@ -32,6 +30,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
