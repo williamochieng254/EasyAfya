@@ -1,5 +1,7 @@
 package com.example.easyafya
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -8,6 +10,9 @@ import com.example.easyafya.databinding.ActivityMainBinding
 class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    // Store the last successfully saved patient
+    private var lastPatient: Patient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +40,6 @@ class MainActivity : ComponentActivity() {
                 location.isEmpty() ||
                 healthNeed.isEmpty()
             ) {
-
                 Toast.makeText(
                     this@MainActivity,
                     "Please fill in all fields",
@@ -50,6 +54,9 @@ class MainActivity : ComponentActivity() {
                 patient.location = location
                 patient.healthNeed = healthNeed
 
+                // Remember the successfully saved patient
+                lastPatient = patient.copy()
+
                 // Refresh Data Binding
                 binding.patient = patient
                 binding.executePendingBindings()
@@ -59,6 +66,28 @@ class MainActivity : ComponentActivity() {
                     "Health request saved successfully",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+
+        // CALL CONTACT button: open the phone dialer
+        binding.callButton.setOnClickListener {
+
+            val savedPatient = lastPatient
+
+            if (savedPatient == null) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Save a health request first",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+                val dialIntent = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.parse("tel:${savedPatient.phone}")
+                )
+
+                startActivity(dialIntent)
             }
         }
     }
