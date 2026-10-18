@@ -1,94 +1,45 @@
+
 package com.example.easyafya
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import com.example.easyafya.databinding.ActivityMainBinding
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-
-    // Store the last successfully saved patient
-    private var lastPatient: Patient? = null
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onCreate")
+        setContentView(R.layout.activity_main)
+    }
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onStart() {
+        super.onStart()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onStart")
+    }
 
-        val patient = Patient()
+    override fun onResume() {
+        super.onResume()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onResume")
+    }
 
-        // Connect the Patient object to Data Binding
-        binding.patient = patient
+    override fun onPause() {
+        super.onPause()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onPause")
+    }
 
-        // SAVE button
-        binding.saveButton.setOnClickListener {
+    override fun onStop() {
+        super.onStop()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onStop")
+    }
 
-            val name = binding.nameEditText.text.toString().trim()
-            val phone = binding.phoneEditText.text.toString().trim()
-            val location = binding.locationEditText.text.toString().trim()
-            val healthNeed = binding.healthNeedEditText.text.toString().trim()
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onRestart")
+    }
 
-            // Validation
-            if (
-                name.isEmpty() ||
-                phone.isEmpty() ||
-                location.isEmpty() ||
-                healthNeed.isEmpty()
-            ) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Please fill in all fields",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-
-                // Store the entered information
-                patient.name = name
-                patient.phone = phone
-                patient.location = location
-                patient.healthNeed = healthNeed
-
-                // Remember the successfully saved patient
-                lastPatient = patient.copy()
-
-                // Refresh Data Binding
-                binding.patient = patient
-                binding.executePendingBindings()
-
-                Toast.makeText(
-                    this@MainActivity,
-                    "Health request saved successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-        // CALL CONTACT button: open the phone dialer
-        binding.callButton.setOnClickListener {
-
-            val savedPatient = lastPatient
-
-            if (savedPatient == null) {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Save a health request first",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-                val dialIntent = Intent(
-                    Intent.ACTION_DIAL,
-                    Uri.parse("tel:${savedPatient.phone}")
-                )
-
-                startActivity(dialIntent)
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onDestroy")
     }
 }
