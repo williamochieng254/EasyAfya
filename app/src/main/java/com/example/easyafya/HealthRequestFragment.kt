@@ -1,4 +1,3 @@
-
 package com.example.easyafya
 
 import android.content.Intent
@@ -48,10 +47,7 @@ class HealthRequestFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val patient = binding.patient ?: Patient()
@@ -72,13 +68,11 @@ class HealthRequestFragment : Fragment() {
         binding.locationEditText.setText(patient.location)
         binding.healthNeedEditText.setText(patient.healthNeed)
 
-        // Save health request
         binding.saveButton.setOnClickListener {
             val name = binding.nameEditText.text.toString().trim()
             val phone = binding.phoneEditText.text.toString().trim()
             val location = binding.locationEditText.text.toString().trim()
-            val healthNeed =
-                binding.healthNeedEditText.text.toString().trim()
+            val healthNeed = binding.healthNeedEditText.text.toString().trim()
 
             if (
                 name.isEmpty() ||
@@ -99,17 +93,13 @@ class HealthRequestFragment : Fragment() {
 
                 lastPatient = patient.copy()
 
-// Save the health request in the repository
+                // Save the health request in the repository.
                 PatientRepository.addPatient(patient.copy())
 
                 binding.patient = patient
                 binding.executePendingBindings()
 
-                Toast.makeText(
-                    requireContext(),
-                    "Health request saved successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // Display the success message once.
                 Toast.makeText(
                     requireContext(),
                     "Health request saved successfully",
@@ -118,7 +108,7 @@ class HealthRequestFragment : Fragment() {
             }
         }
 
-        // Call contact using the phone dialer
+        // Open the phone dialer for the saved patient's number.
         binding.callButton.setOnClickListener {
             val savedPatient = lastPatient
 
@@ -137,7 +127,7 @@ class HealthRequestFragment : Fragment() {
             }
         }
 
-        // Navigate to Health Information screen
+        // Navigate to the Health Information screen.
         binding.healthInfoButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_healthRequestFragment_to_healthInfoFragment
