@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +32,17 @@ class LoginActivity : AppCompatActivity() {
 
         val helpTextView =
             findViewById<TextView>(R.id.helpTextView)
+
+        val callUsButton =
+            findViewById<Button>(R.id.callUsButton)
+
+        callUsButton.setOnClickListener {
+            val dialIntent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.parse("tel:")
+            )
+            startActivity(dialIntent)
+        }
 
         // Get the email sent from RegisterActivity
         val registeredEmail = intent.getStringExtra("EMAIL")
