@@ -9,7 +9,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         Log.d("EASYAFYA_LIFECYCLE", "MainActivity: onCreate")
+
+        // Initialize persistent storage before fragments access saved requests.
+        PatientRepository.initialize(applicationContext)
+
         setContentView(R.layout.activity_main)
     }
 

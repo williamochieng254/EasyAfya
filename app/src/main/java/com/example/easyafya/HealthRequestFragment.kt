@@ -1,3 +1,4 @@
+
 package com.example.easyafya
 
 import android.content.Intent
@@ -91,24 +92,36 @@ class HealthRequestFragment : Fragment() {
                 patient.location = location
                 patient.healthNeed = healthNeed
 
-                lastPatient = patient.copy()
+                // Save only if this request is not already present.
+                val wasSaved = PatientRepository.addPatient(patient.copy())
 
-                // Save the health request in the repository.
-                PatientRepository.addPatient(patient.copy())
+                if (wasSaved) {
+                    lastPatient = patient.copy()
 
-                binding.patient = patient
-                binding.executePendingBindings()
+                    binding.patient = patient
+                    binding.executePendingBindings()
 
-                // Display the success message once.
-                Toast.makeText(
-                    requireContext(),
-                    "Health request saved successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Health request saved successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "This health request has already been saved",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    Log.d(
+                        "EASYAFYA_DUPLICATE",
+                        "Duplicate health request rejected"
+                    )
+                }
             }
         }
 
-        // Open the phone dialer for the saved patient's number.
+        // Open the phone dialer for the last successfully saved patient.
         binding.callButton.setOnClickListener {
             val savedPatient = lastPatient
 
